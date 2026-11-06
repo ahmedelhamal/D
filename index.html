@@ -100,6 +100,16 @@ footer{position:relative;z-index:4;margin-top:-44px;background:var(--ink);border
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}.pl{transform:none}}
 </style>
 <style>.bg{overflow:hidden}.hero{overflow-x:clip}main{overflow-x:clip}</style>
+<style id="pl-extra">
+.pl video{object-fit:contain!important}
+.ctl{gap:6px!important;padding:6px 8px!important;inset-inline:10px!important;bottom:10px!important}
+.tm{min-width:74px!important;font-size:.74rem!important}
+.ctl .rt svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.pl.fsx{position:fixed!important;z-index:99999;inset:0;width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;margin:0!important;border-radius:0!important;aspect-ratio:auto!important;transform:none!important;box-shadow:none!important;background:#000}
+.pl.fsx::before{display:none}
+.pl.fsx.rot{inset:auto;top:0;left:0;width:100vh!important;width:100dvh!important;height:100vw!important;transform-origin:0 0;transform:translateX(100vw) rotate(90deg)!important}
+body.fsx-lock{overflow:hidden}
+</style>
 </head>
 <body class="lock">
 <div class="topbar" id="bar" aria-hidden="true"></div>
@@ -206,13 +216,13 @@ dl.addEventListener('click',()=>{
   setTimeout(()=>{dl.classList.remove('done');$('lbl').textContent='ابدأ التحميل';},5200);
 });
 /* player */
-const ic={play:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>',on:'<svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15 8.5a5 5 0 010 7M17.5 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>',off:'<svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>',fs:'<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>'};
+const ic={play:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>',on:'<svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM15 8.5a5 5 0 010 7M17.5 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>',off:'<svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>',rt:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 10-2.6 5.9M20 5v5h-5"/></svg>',fs:'<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>'};
 const fmt=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
 function player(el){
   const src=el.dataset.src;
   if(!src){el.innerHTML='<div class="soon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8.5v7l6-3.5z"/></svg><span>فيديو التثبيت قريبًا</span></div>';return}
   el.classList.add('paused','muted');
-  el.innerHTML='<video playsinline preload="metadata"></video><button class="big" aria-label="تشغيل">'+ic.play+'</button><div class="ctl"><button class="pp" aria-label="تشغيل / إيقاف"><span class="i-play">'+ic.play+'</span><span class="i-pause">'+ic.pause+'</span></button><div class="sc" role="slider" aria-label="موضع الفيديو"><i></i><b></b></div><span class="tm">0:00 / 0:00</span><button class="mu" aria-label="الصوت"><span class="i-on">'+ic.on+'</span><span class="i-off">'+ic.off+'</span></button><button class="fs" aria-label="ملء الشاشة">'+ic.fs+'</button></div>';
+  el.innerHTML='<video playsinline preload="metadata"></video><button class="big" aria-label="تشغيل">'+ic.play+'</button><div class="ctl"><button class="pp" aria-label="تشغيل / إيقاف"><span class="i-play">'+ic.play+'</span><span class="i-pause">'+ic.pause+'</span></button><div class="sc" role="slider" aria-label="موضع الفيديو"><i></i><b></b></div><span class="tm">0:00 / 0:00</span><button class="mu" aria-label="الصوت"><span class="i-on">'+ic.on+'</span><span class="i-off">'+ic.off+'</span></button><button class="rt" aria-label="تدوير الشاشة">'+ic.rt+'</button><button class="fs" aria-label="ملء الشاشة">'+ic.fs+'</button></div>';
   const v=el.querySelector('video'),sc=el.querySelector('.sc'),bar=sc.querySelector('i'),kn=sc.querySelector('b'),tm=el.querySelector('.tm');
   v.src=src;v.muted=true;v.loop=!!el.dataset.auto;
   let userPaused=false,idleT;
@@ -225,7 +235,22 @@ function player(el){
   v.addEventListener('click',toggle);
   el.querySelector('.big').onclick=toggle;el.querySelector('.pp').onclick=toggle;
   el.querySelector('.mu').onclick=()=>{v.muted=!v.muted;el.classList.toggle('muted',v.muted)};
-  el.querySelector('.fs').onclick=()=>{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f)f.call(el);else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()};
+  /* حجم المشغل حسب شكل الفيديو (طولي أو عرضي) */
+  v.addEventListener('loadedmetadata',()=>{const w=v.videoWidth,h=v.videoHeight;if(!w||!h)return;const r=w/h;el.style.aspectRatio=w+' / '+h;if(r<1){el.style.width='min(100%,'+(80*r).toFixed(2)+'vh)';el.style.marginInline='auto'}});
+  /* وضع ملء الشاشة الخاص بنا: fsx = ملء الشاشة، rot = مقلوب بالعرض */
+  let ph=null;
+  const fsxOn=rot=>{if(!el.classList.contains('fsx')){ph=document.createElement('div');ph.style.cssText='width:100%;height:'+el.offsetHeight+'px';el.parentNode.insertBefore(ph,el);document.body.appendChild(el);el.classList.add('fsx');document.body.classList.add('fsx-lock')}el.classList.toggle('rot',!!rot)};
+  const fsxOff=()=>{if(!el.classList.contains('fsx'))return;el.classList.remove('fsx','rot');document.body.classList.remove('fsx-lock');if(ph){ph.parentNode.insertBefore(el,ph);ph.remove();ph=null}try{measure();frame()}catch(e){}};
+  const nativeFs=()=>document.fullscreenElement||document.webkitFullscreenElement;
+  el.querySelector('.fs').onclick=()=>{
+    if(el.classList.contains('fsx')){fsxOff();return}
+    if(nativeFs()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+    const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f)f.call(el);else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()};
+  el.querySelector('.rt').onclick=()=>{
+    if(nativeFs()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);try{screen.orientation.unlock()}catch(e){}}
+    if(el.classList.contains('fsx')){
+      if(el.classList.contains('rot'))fsxOff();else fsxOn(true);
+    }else fsxOn(true)};
   const seek=e=>{const r=sc.getBoundingClientRect();v.currentTime=Math.min(Math.max((e.clientX-r.left)/r.width,0),1)*(v.duration||0)};
   sc.addEventListener('pointerdown',e=>{sc.setPointerCapture(e.pointerId);seek(e);sc.onpointermove=seek});
   sc.addEventListener('pointerup',()=>{sc.onpointermove=null});
