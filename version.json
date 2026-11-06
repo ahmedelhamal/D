@@ -1,1 +1,6 @@
-{ "version": "1.0", "url": "" }
+{
+  "versionCode": 1,
+  "versionName": "1.0",
+  "apkUrl": "https://github.com/ahmedelhamal/D/releases/latest/download/app.apk",
+  "notes": "النسخة الأولى"
+}
